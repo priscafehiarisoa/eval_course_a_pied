@@ -1,0 +1,18 @@
+{
+  "ADMIN": [
+    {"icon": "list-details", "menuName": "reset","menuPath": "/reset"},
+    {"icon": "list-details", "menuName": "import points","menuPath": "/admin/importPoints"},
+    {"icon": "list-details", "menuName": "import donnee","menuPath": "/admin/importDonnee"}
+  ],
+  "EQUIPE": [
+
+  ],
+  "global": [
+    {"icon": "dashboard", "menuName": "home","menuPath": "/"},
+    {"icon": "list-details", "menuName": "List Etapes","menuPath": "/listEtapes"},
+    {"icon": "list-details", "menuName": "classement général par etape","menuPath": "/classementGeneralPArEtape"},
+    {"icon": "list-details", "menuName": "classement général par equipe","menuPath": "/classementGeneralParEquipe"}
+
+
+  ]
+}
