@@ -114,7 +114,10 @@
                 jsPDF:        { unit: 'in', format: 'a4', orientation: 'landscape' }
             };
             // Choose the element that our invoice is rendered in.
-            html2pdf().set(opt).from(content).save();
+            // html2pdf().set(opt).from(content).save();
+            html2pdf().set(opt).from(content).toPdf().get('pdf').then(function (pdf) {
+                window.open(pdf.output('bloburl'), '_blank');
+            });
         }
 
     </script>

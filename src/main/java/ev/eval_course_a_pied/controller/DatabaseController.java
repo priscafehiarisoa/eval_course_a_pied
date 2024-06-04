@@ -23,4 +23,9 @@ public class DatabaseController {
         globalServices.resetAll();
         return "admin/reset";
     }
+
+    @GetMapping("index")
+    public String index(){
+        return "index";
+    }
 }

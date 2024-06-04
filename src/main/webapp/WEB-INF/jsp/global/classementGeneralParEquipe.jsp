@@ -91,6 +91,11 @@
                                     <p class="text-body d-block"><%=classement.get(i).getEquipe().getNomEquipe()%> </p>
                                     <div class="text-muted text-truncate mt-n1">Points : <%=classement.get(i).getPoints()%></div>
                                 </div>
+                                <div class="col-2">
+                                    <% if (classement.get(i).getRang()==1){ %>
+                                    <a class="btn btn-success" href="/certificat?idEquipe=<%=classement.get(i).getEquipe().getId()%>&points=<%=classement.get(i).getPoints()%>"> get the certificate</a>
+                                    <%}%>
+                                </div>
                             </div>
                         </div>
                     </div>

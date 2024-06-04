@@ -1,10 +1,8 @@
 package ev.eval_course_a_pied.controller;
 
-import ev.eval_course_a_pied.entity.Categorie;
-import ev.eval_course_a_pied.entity.ClassementCoureurParEtape;
-import ev.eval_course_a_pied.entity.ClassementEquipe;
-import ev.eval_course_a_pied.entity.Etape;
+import ev.eval_course_a_pied.entity.*;
 import ev.eval_course_a_pied.repository.CategorieRepository;
+import ev.eval_course_a_pied.repository.EquipeRepository;
 import ev.eval_course_a_pied.repository.EtapeRepository;
 import ev.eval_course_a_pied.services.ClassementService;
 import org.springframework.stereotype.Controller;
@@ -22,12 +20,15 @@ public class ClassementController {
     private final EtapeRepository etapeRepository;
     private final ClassementService classementService;
     private final CategorieRepository categorieRepository;
+    private final EquipeRepository equipeRepository;
 
     public ClassementController(EtapeRepository etapeRepository, ClassementService classementService,
-                                CategorieRepository categorieRepository) {
+                                CategorieRepository categorieRepository,
+                                EquipeRepository equipeRepository) {
         this.etapeRepository = etapeRepository;
         this.classementService = classementService;
         this.categorieRepository = categorieRepository;
+        this.equipeRepository = equipeRepository;
     }
 
     /**
@@ -88,6 +89,16 @@ public class ClassementController {
         modelAndView.addObject("classement",classement);
         modelAndView.addObject("categorie",categorie);
         modelAndView.addObject("categorieList",listCategories);
+        return modelAndView;
+    }
+
+    @GetMapping("certificat")
+    public ModelAndView certificat (@RequestParam("idEquipe") int equipe, @RequestParam("points") double points ){
+        ModelAndView modelAndView= new ModelAndView("global/Certificat");
+        Equipe equipe1 = equipeRepository.findById(equipe).orElse(null);
+        modelAndView.addObject("equipe",equipe1);
+        modelAndView.addObject("points",points);
+        modelAndView.addObject("redirectPage","classementGeneralParEquipeCategorie");
         return modelAndView;
     }
 }
