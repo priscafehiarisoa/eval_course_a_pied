@@ -131,6 +131,8 @@ select row_number() over () as id,
        etape_id,
        coureur_id,
        rang_coureur,
+       heure_depart,
+       heure_arrive,
        coalesce(points_obtenus, 0)  as points
 from v_rang_coureur_etape rce
          left join points pc on rang_coureur = pc.classement

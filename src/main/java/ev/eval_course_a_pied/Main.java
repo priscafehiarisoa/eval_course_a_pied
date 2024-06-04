@@ -123,10 +123,10 @@ public class Main {
 
 //            System.out.println("duration "+tempsCoureursParEtapeRepository.getCoureurDuration(coureurRepository.findById(2).orElse(null),etapeRepository.findById(3).orElse(null)));
 
-            System.out.println();
-            globalServices.generateCategorie(coureurRepository.findById(15).orElse(null)).getCategories().forEach(System.out::println);;
-            System.out.println(coureurRepository.findById(1).orElse(null).getGenre().getNom_genre());
-            System.out.println(penaliteRepository.findByIdAndAndEtatNot(1,-10));
+//            System.out.println();
+//            globalServices.generateCategorie(coureurRepository.findById(15).orElse(null)).getCategories().forEach(System.out::println);;
+//            System.out.println(coureurRepository.findById(1).orElse(null).getGenre().getNom_genre());
+//            System.out.println(penaliteRepository.findByIdAndAndEtatNot(1,-10));
 
 
         };

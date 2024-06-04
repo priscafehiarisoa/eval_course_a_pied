@@ -4,7 +4,8 @@
     {"icon": "list-details", "menuName": "reset","menuPath": "/reset"},
     {"icon": "list-details", "menuName": "import points","menuPath": "/admin/importPoints"},
     {"icon": "list-details", "menuName": "import donnee","menuPath": "/admin/importDonnee"},
-    {"icon": "list-details", "menuName": "Generate Categories","menuPath": "/generateCategories"}
+    {"icon": "list-details", "menuName": "Generate Categories","menuPath": "/generateCategories"},
+    {"icon": "list-details", "menuName": "pénalites","menuPath": "/admin/penalites"}
   ],
   "EQUIPE": [
     {"icon": "list-details", "menuName": "List Etapes","menuPath": "equipe/listEtapes"}
