@@ -9,6 +9,7 @@ import ev.eval_course_a_pied.exeption.EtapeExeption;
 import ev.eval_course_a_pied.repository.*;
 import ev.eval_course_a_pied.services.auth.RegisterService;
 import ev.eval_course_a_pied.services.auth.UserService;
+import ev.eval_course_a_pied.utils.Statics;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.servlet.ModelAndView;
@@ -18,12 +19,8 @@ import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.nio.file.StandardCopyOption;
-import java.time.DateTimeException;
-import java.time.LocalDateTime;
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Optional;
+import java.time.*;
+import java.util.*;
 
 @Service
 public class GlobalServices {
@@ -38,6 +35,7 @@ public class GlobalServices {
     private final GenreRepository genreRepository;
     private final CategorieRepository categorieRepository;
     private final RegisterService registerService;
+    private final PenaliteRepository penaliteRepository;
 
     public GlobalServices(UserService userService,
                           EtapeRepository etapeRepository,
@@ -47,7 +45,8 @@ public class GlobalServices {
                           EquipeRepository equipeRepository,
                           PointRepository pointRepository,
                           GenreRepository genreRepository,
-                          CategorieRepository categorieRepository, RegisterService registerService) {
+                          CategorieRepository categorieRepository, RegisterService registerService,
+                          PenaliteRepository penaliteRepository) {
         this.userService = userService;
 
         this.etapeRepository = etapeRepository;
@@ -60,6 +59,7 @@ public class GlobalServices {
         this.genreRepository = genreRepository;
         this.categorieRepository = categorieRepository;
         this.registerService = registerService;
+        this.penaliteRepository = penaliteRepository;
     }
 
     public List<Coureur> getCoureursParEtape(int etapeId) throws Exception {
@@ -176,5 +176,73 @@ public class GlobalServices {
         userService.resetuser(tobedeleted);
     }
 
+//    get chrono coureurs par rapport aux coureurs d'une étape d'une equipe
+    public List<ChronoCoureurs> getChronoCoureurEquipeEtape(Etape etape, Equipe equipe){
+        // get liste des coureurs par equipe
+        List<Coureur> coureurs = coureurEtapeRepository.getListCoureursParEquipeEtape(etape,equipe);
+        List<ChronoCoureurs> chronoCoureurs = new ArrayList<>();
+        for (int i = 0; i < coureurs.size(); i++) {
+            Duration duration = tempsCoureursParEtapeRepository.getCoureurDuration(coureurs.get(i),etape);
+            chronoCoureurs.add(new ChronoCoureurs(etape,coureurs.get(i),duration));
+        }
+        return chronoCoureurs;
+    }
+    public HashMap<Etape,List<ChronoCoureurs>> getChronoParCoureur(List<Etape> etapes,Equipe equipe){
+        HashMap<Etape,List<ChronoCoureurs>> hashMap = new HashMap<>();
+        for (int i = 0; i < etapes.size(); i++) {
+            hashMap.put(etapes.get(i),getChronoCoureurEquipeEtape(etapes.get(i),equipe));
+        }
+        return hashMap;
+    }
 
+    public Coureur generateCategorie (Coureur coureur){
+        List<Categorie> categories = new ArrayList<>();
+
+        if((LocalDate.now().getYear()-coureur.getDateDeNaissance().getYear())<18){
+            categories.add(categorieRepository.getCategorieByNomCategorie("junior").orElse(categorieRepository.getCategorieByNomCategorie("Junior").orElse(categorieRepository.getCategorieByNomCategorie("JUNIOR").orElse(null))));
+        }
+        String g = coureur.getGenre().getNom_genre();
+
+        if(coureur.getGenre().getNom_genre().equals("M")){
+            categories.add(categorieRepository.getCategorieByNomCategorie("homme").orElse(categorieRepository.getCategorieByNomCategorie("Homme").orElse(categorieRepository.getCategorieByNomCategorie("HOMME").orElse(null))));
+        }
+        else if(coureur.getGenre().getNom_genre().equals("F")){
+            categories.add(categorieRepository.getCategorieByNomCategorie("femme").orElse(categorieRepository.getCategorieByNomCategorie("Femme").orElse(categorieRepository.getCategorieByNomCategorie("FEMME").orElse(null))));
+        }
+
+
+        coureur.setCategories(categories);
+        return coureur;
+    }
+
+    public List<Coureur> generateCategories(){
+        List<Coureur> temp = coureurRepository.findAll();
+        List<Coureur> withCategories= new ArrayList<>();
+        for (int i = 0; i < temp.size(); i++) {
+            withCategories.add(generateCategorie(temp.get(i)));
+        }
+        return coureurRepository.saveAll(withCategories);
+    }
+
+    public Penalite savePenalites(int idEtape, int idEquipe, LocalTime penalites) throws EtapeExeption, EquipeExeptions {
+        Etape etape = etapeRepository.findById(idEtape).orElse(null);
+        Equipe equipe = equipeRepository.findById(idEquipe).orElse(null);
+        if(etape==null){
+            throw new EtapeExeption("etape Inexistante ");
+        }
+        if (equipe == null){
+            throw new EquipeExeptions("equipe inexistante");
+        }
+        Penalite penalite = new Penalite(equipe,etape,penalites);
+        return penaliteRepository.save(penalite);
+    }
+
+    public void deletePenalites(int idPenalites) throws Exception {
+        Penalite penalite = penaliteRepository.findByIdAndAndEtatNot(idPenalites, Statics.DELETE_STATE).orElse(null);
+        if(penalite == null){
+            throw new Exception("penalites non existante ");
+        }
+        penalite.setEtat(Statics.DELETE_STATE);
+        penaliteRepository.save(penalite);
+    }
 }

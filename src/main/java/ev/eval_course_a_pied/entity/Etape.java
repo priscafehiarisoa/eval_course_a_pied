@@ -49,7 +49,7 @@ public class Etape {
         setLongueur(longueur);
         setHeureDepart(heureDepart);
     }
-    public Etape(Integer rangEtape, String lieu, Double longueur, LocalTime heureDepart,LocalDate dateEtape) {
+    public Etape(Integer rangEtape, String lieu, Double longueur, LocalTime heureDepart,LocalDate dateEtape,int nombreCoureursParEquipe) {
         setRangEtape(rangEtape);
         setLieu(lieu);
         setEtat(Statics.INIT_STATE);
@@ -57,6 +57,7 @@ public class Etape {
         System.out.println(dateEtape.toString()+"T"+heureDepart.toString());
         setHeureDepart(LocalDateTime.of(dateEtape,heureDepart));
         setDateEtape(dateEtape);
+        setNombreCoureursParEquipe(nombreCoureursParEquipe);
     }
 
     public Etape( String lieu,  String longueur, String nombreCoureursParEquipe,String rangEtape,String dateDepart,String heureDepart) {

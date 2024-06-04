@@ -112,7 +112,7 @@ public class ImportService {
         List<Etape> etapes = new ArrayList<>();
         for (int i = 0; i < readedFromCsv.size(); i++) {
             System.out.println("thegrfedasxq");
-            Etape etape= new Etape(readedFromCsv.get(i).getRangEtape(),readedFromCsv.get(i).getNom(),readedFromCsv.get(i).getLongueur(),readedFromCsv.get(i).getHeureDepart(),readedFromCsv.get(i).getDateDepart());
+            Etape etape= new Etape(readedFromCsv.get(i).getRangEtape(),readedFromCsv.get(i).getNom(),readedFromCsv.get(i).getLongueur(),readedFromCsv.get(i).getHeureDepart(),readedFromCsv.get(i).getDateDepart(),readedFromCsv.get(i).getCoureurParEquipe());
             System.out.println(etape);
             etapes.add(etape);
         }

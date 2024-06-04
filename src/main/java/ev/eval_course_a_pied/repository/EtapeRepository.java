@@ -17,10 +17,6 @@ public interface EtapeRepository extends JpaRepository<Etape, Integer> {
     @Query(value = "select e from Etape e order by e.rangEtape ")
     List<Etape> findAllEtapes();
     
-    @Query(value = "select coalesce(points_obtenus,0) as point ,classement.* from " +
-            "                        (select DENSE_RANK() OVER (ORDER BY duree) as rang, * from v_classement where etape_id=:etape) as classement " +
-            "                            LEFT JOIN " +
-            "                         points " +
-            "                         ON   rang = points.classement",nativeQuery = true)
-    public List<Object[]> getClassementParIdEtape(@Param("etape") int idEtape);
+    @Query(value = "select points,rang_coureur, (heure_arrive-heure_depart) as durree, v_classement_etape.id,heure_arrive,heure_depart,coureur_id,v_classement_etape.etape_id from v_classement_etape where etape_id=:etape ",nativeQuery = true)
+    List<Object[]> getClassementParIdEtape(@Param("etape") int idEtape);
 }

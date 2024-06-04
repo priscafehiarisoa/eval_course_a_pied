@@ -1,12 +1,15 @@
 package ev.eval_course_a_pied.controller;
 
+import ev.eval_course_a_pied.entity.Categorie;
 import ev.eval_course_a_pied.entity.ClassementCoureurParEtape;
 import ev.eval_course_a_pied.entity.ClassementEquipe;
 import ev.eval_course_a_pied.entity.Etape;
+import ev.eval_course_a_pied.repository.CategorieRepository;
 import ev.eval_course_a_pied.repository.EtapeRepository;
 import ev.eval_course_a_pied.services.ClassementService;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.servlet.ModelAndView;
 
@@ -18,10 +21,13 @@ public class ClassementController {
 
     private final EtapeRepository etapeRepository;
     private final ClassementService classementService;
+    private final CategorieRepository categorieRepository;
 
-    public ClassementController(EtapeRepository etapeRepository, ClassementService classementService) {
+    public ClassementController(EtapeRepository etapeRepository, ClassementService classementService,
+                                CategorieRepository categorieRepository) {
         this.etapeRepository = etapeRepository;
         this.classementService = classementService;
+        this.categorieRepository = categorieRepository;
     }
 
     /**
@@ -60,9 +66,28 @@ public class ClassementController {
         ModelAndView modelAndView = new ModelAndView("global/classementGeneralParEquipe");
         List<ClassementEquipe> classement = new ArrayList<>();
         classement= classementService.getClassementEquipe();
+        List<Categorie> listCategories = categorieRepository.findAll();
+
         String pageTitle = "liste des classement par equipe ";
         modelAndView.addObject("pageTitle",pageTitle);
         modelAndView.addObject("classement",classement);
+        modelAndView.addObject("categorieList",listCategories);
+
+        return modelAndView;
+    }
+
+    @GetMapping("classementGeneralParEquipeCategorie")
+    public ModelAndView classementGeneralParEquipeCategorie(@RequestParam("id") int idCategorie){
+        ModelAndView modelAndView = new ModelAndView("global/classementGeneralParEquipe");
+        List<ClassementEquipe> classement = new ArrayList<>();
+        classement= classementService.classementEquipeParCategorie(idCategorie);
+        Categorie categorie = categorieRepository.findById(idCategorie).orElse(null);
+        List<Categorie> listCategories = categorieRepository.findAll();
+        String pageTitle = "liste des classement par equipe ";
+        modelAndView.addObject("pageTitle",pageTitle);
+        modelAndView.addObject("classement",classement);
+        modelAndView.addObject("categorie",categorie);
+        modelAndView.addObject("categorieList",listCategories);
         return modelAndView;
     }
 }

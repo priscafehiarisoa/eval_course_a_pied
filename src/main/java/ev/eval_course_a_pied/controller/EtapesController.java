@@ -1,14 +1,13 @@
 package ev.eval_course_a_pied.controller;
 
-import ev.eval_course_a_pied.entity.Coureur;
-import ev.eval_course_a_pied.entity.Etape;
-import ev.eval_course_a_pied.entity.TempsCoureursParEtape;
+import ev.eval_course_a_pied.entity.*;
 import ev.eval_course_a_pied.entity.user.UserModel;
 import ev.eval_course_a_pied.exeption.CoureurEtapeExeption;
 import ev.eval_course_a_pied.exeption.CoureurExeption;
 import ev.eval_course_a_pied.exeption.EtapeExeption;
 import ev.eval_course_a_pied.model.Pagination;
 import ev.eval_course_a_pied.repository.EtapeRepository;
+import ev.eval_course_a_pied.services.EquipeService;
 import ev.eval_course_a_pied.services.GlobalServices;
 import ev.eval_course_a_pied.services.auth.UserService;
 import org.springframework.data.domain.Page;
@@ -30,13 +29,15 @@ public class EtapesController {
 
     private final EtapeRepository etapeRepository;
     private final GlobalServices globalServices;
+    private final EquipeService equipeService;
 
-    public EtapesController(EtapeRepository etapeRepository, GlobalServices globalServices) {
+    public EtapesController(EtapeRepository etapeRepository, GlobalServices globalServices, EquipeService equipeService) {
         this.etapeRepository = etapeRepository;
         this.globalServices = globalServices;
+        this.equipeService = equipeService;
     }
 
-    @GetMapping("/listEtapes")
+    @GetMapping("admin/listEtapes")
     public ModelAndView listEtapes(@RequestParam(value = "pageNumber" , required = false) Integer pageNumber, @RequestParam( value = "pageSize", required = false) Integer pageSize){
         if(pageNumber==null)pageNumber=0;
         if(pageSize==null)pageSize=8;
@@ -47,9 +48,26 @@ public class EtapesController {
         modelAndView.addObject("listObject",films);
         modelAndView.addObject("pagination",pagination);
         modelAndView.addObject("pageTitle",pageTitle);
-        modelAndView.addObject("pageRedirection","/listEtapes");
+        modelAndView.addObject("pageRedirection","admin/listEtapes");
         return modelAndView;
     }
+
+    @GetMapping("equipe/listEtapes")
+
+    public ModelAndView listeEtapeEquipe (){
+        Equipe equipe = equipeService.getConnectedEquipe();
+        String pageTitle="equipe "+equipe.getNomEquipe();
+        List<Etape> etapes = etapeRepository.findAllEtapes();
+        HashMap<Etape,List<ChronoCoureurs>> coureurs = globalServices.getChronoParCoureur(etapes,equipe);
+        ModelAndView modelAndView = new ModelAndView("equipe/etapeList");
+        modelAndView.addObject("coureurs",coureurs);
+        modelAndView.addObject("etapes",etapes);
+        modelAndView.addObject("pageTitle",pageTitle);
+
+
+        return modelAndView;
+    }
+
 /**
  * todo : regler le problème de redirection ici
  * */

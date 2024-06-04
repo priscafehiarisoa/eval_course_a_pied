@@ -6,8 +6,8 @@ import lombok.Data;
 public class ClassementEquipe implements Comparable<ClassementEquipe>  {
     Equipe equipe;
     int rang ;
-
     double points;
+    Categorie categorie;
 
     public ClassementEquipe(Equipe equipe, double points) {
         this.equipe = equipe;

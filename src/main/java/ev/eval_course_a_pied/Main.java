@@ -6,6 +6,7 @@ import ev.eval_course_a_pied.entity.user.UserModel;
 import ev.eval_course_a_pied.repository.*;
 import ev.eval_course_a_pied.repository.userRepository.RoleRepository;
 import ev.eval_course_a_pied.services.ClassementService;
+import ev.eval_course_a_pied.services.GlobalServices;
 import ev.eval_course_a_pied.services.auth.RegisterService;
 import ev.eval_course_a_pied.utils.Statics;
 import ev.eval_course_a_pied.utils.Utils;
@@ -27,12 +28,13 @@ public class Main {
     private final CategorieRepository categorieRepository;
     private final GenreRepository genreRepository;
     private final ClassementService classementService;
+    private final GlobalServices globalServices;
 
     public Main(RoleRepository roleRepository, RegisterService registerService,
                 EquipeRepository equipeRepository,
                 EtapeRepository etapeRepository,
                 CategorieRepository categorieRepository,
-                GenreRepository genreRepository, ClassementService classementService) {
+                GenreRepository genreRepository, ClassementService classementService, GlobalServices globalServices) {
         this.roleRepository = roleRepository;
         this.registerService = registerService;
         this.equipeRepository = equipeRepository;
@@ -40,12 +42,15 @@ public class Main {
         this.categorieRepository = categorieRepository;
         this.genreRepository = genreRepository;
         this.classementService = classementService;
+        this.globalServices = globalServices;
     }
 
     @Bean
     CommandLineRunner commandLineRunner (CoureurRepository coureurRepository,
                                          CoureurEtapeRepository coureurEtapeRepository,
-                                         TempResultatRepository tempResultatRepository){
+                                         TempResultatRepository tempResultatRepository,
+                                         TempsCoureursParEtapeRepository tempsCoureursParEtapeRepository,
+                                         PenaliteRepository penaliteRepository){
         return args -> {
             // role Equipe
 //            // create equipe
@@ -114,7 +119,16 @@ public class Main {
 
 //            System.out.println(classementService.getAllPointsEquipe());
 //            classementService.getClassementEquipe().forEach(System.out::println);
-            tempResultatRepository.getDistinctEquipe().forEach(System.out::println);
+//            tempResultatRepository.getDistinctEquipe().forEach(System.out::println);
+
+//            System.out.println("duration "+tempsCoureursParEtapeRepository.getCoureurDuration(coureurRepository.findById(2).orElse(null),etapeRepository.findById(3).orElse(null)));
+
+            System.out.println();
+            globalServices.generateCategorie(coureurRepository.findById(15).orElse(null)).getCategories().forEach(System.out::println);;
+            System.out.println(coureurRepository.findById(1).orElse(null).getGenre().getNom_genre());
+            System.out.println(penaliteRepository.findByIdAndAndEtatNot(1,-10));
+
+
         };
     }
 }

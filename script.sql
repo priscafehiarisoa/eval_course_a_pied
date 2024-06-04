@@ -100,3 +100,40 @@ select * from etapes
 
 
 select distinct temp_resultat.genre from temp_resultat where genre not in (select nom_genre from genre)
+
+-- VUES
+
+-- ==============
+-- VUE POUR AVOIR LES RANGS DES COUREURS PAR ETAPE
+CREATE OR REPLACE VIEW v_rang_coureur_etape AS
+    --test
+SELECT ce.id,
+       ce.coureur_id,
+       c2.nom_coureur,
+       nom_equipe,
+       ce.etape_id,
+       e.heure_depart,
+       heure_arrive,
+       (COALESCE(heure_arrive, NOW()) - e.heure_depart )          AS duree_course,
+       dense_rank() OVER (PARTITION BY ce.etape_id ORDER BY (heure_arrive)) AS rang_coureur
+FROM temps_coureurs_par_etapes ce
+         join etapes e on e.id = ce.etape_id
+         join coureur c2 on c2.id = ce.coureur_id
+         join public.equipe e2 on c2.equipe_id = e2.id
+ORDER BY ce.etape_id, heure_arrive;
+
+
+
+-- VUE POUR AVOIR LES Points DES COUREURS EN FONCTION DE LEUR RANG
+create or replace view v_classement_etape as
+select row_number() over () as id,
+       rce.id as id_rang_coureur_etape,
+       etape_id,
+       coureur_id,
+       rang_coureur,
+       coalesce(points_obtenus, 0)  as points
+from v_rang_coureur_etape rce
+         left join points pc on rang_coureur = pc.classement
+order by etape_id, rang_coureur;
+
+

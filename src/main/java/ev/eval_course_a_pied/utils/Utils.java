@@ -333,6 +333,9 @@ public class Utils {
         return numberFormat.format(value);
     }
     public static String formatDuration(Duration duration) {
+        if(duration==null){
+            return "0s";
+        }
         long days = duration.toDays();
         duration = duration.minusDays(days);
 

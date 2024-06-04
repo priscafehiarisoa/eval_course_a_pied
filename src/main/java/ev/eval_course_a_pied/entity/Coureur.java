@@ -13,7 +13,6 @@ import java.util.List;
 @Setter
 @Entity
 @Table(name = "coureur")
-//@ToString
 public class Coureur {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -55,4 +54,6 @@ public class Coureur {
 
     public Coureur() {
     }
+
+
 }

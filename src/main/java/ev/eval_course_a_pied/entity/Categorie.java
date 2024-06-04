@@ -3,11 +3,13 @@ package ev.eval_course_a_pied.entity;
 import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.Setter;
+import lombok.ToString;
 
 @Getter
 @Setter
 @Entity
 @Table(name = "categorie")
+@ToString
 public class Categorie {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)

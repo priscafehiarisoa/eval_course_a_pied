@@ -1,6 +1,7 @@
 package ev.eval_course_a_pied.services;
 
 import ev.eval_course_a_pied.entity.*;
+import ev.eval_course_a_pied.repository.CategorieRepository;
 import ev.eval_course_a_pied.repository.CoureurRepository;
 import ev.eval_course_a_pied.repository.EquipeRepository;
 import ev.eval_course_a_pied.repository.EtapeRepository;
@@ -16,13 +17,16 @@ public class ClassementService {
     private final EtapeRepository etapeRepository;
     private final CoureurRepository coureurRepository;
     private final EquipeRepository equipeRepository;
+    private final CategorieRepository categorieRepository;
 
     public ClassementService(EtapeRepository etapeRepository,
                              CoureurRepository coureurRepository,
-                             EquipeRepository equipeRepository) {
+                             EquipeRepository equipeRepository,
+                             CategorieRepository categorieRepository) {
         this.etapeRepository = etapeRepository;
         this.coureurRepository = coureurRepository;
         this.equipeRepository = equipeRepository;
+        this.categorieRepository = categorieRepository;
     }
 
     public List<ClassementCoureurParEtape> getClassementParEtape(int etape){
@@ -42,29 +46,14 @@ public class ClassementService {
     }
 
     public HashMap<Integer,Double> getAllPointsEquipe(){
-        List<Etape> etapes = etapeRepository.findAllEtapes();
-        List<Equipe> equipe = equipeRepository.findAll();
+        List<Object[]> pointsEtape = equipeRepository.getPointsEquipeParEtape();
         //key : equipe
         // value : points
         HashMap<Integer,Double> points = new HashMap<>();
-        for (int i = 0; i < etapes.size(); i++) {
-            System.out.println("i = "+i+" "+ etapes);
-            List<Object[]> pointsEtape = equipeRepository.getPointsEquipeParEtape(etapes.get(i).getId());
-            for (int j = 0; j < pointsEtape.size(); j++) {
-                int equipeId = Integer.valueOf(String.valueOf(pointsEtape.get(j)[1]));
-                double pointsEquipe = Double.valueOf(String.valueOf(pointsEtape.get(j)[0]));
-                System.out.println("equipeid="+equipeId+" points = "+ pointsEquipe);
-                if (points.containsKey(equipeId)) {
-                    points.put(equipeId, points.get(equipeId) + pointsEquipe);
-                } else {
-                    points.put(equipeId, pointsEquipe);
-                }
-            }
-        }
-        for (int i = 0; i < equipe.size(); i++) {
-            if(!points.containsKey(equipe.get(i).getId())){
-                points.put(equipe.get(i).getId(),0.0);
-            }
+        for (int i = 0; i < pointsEtape.size(); i++) {
+            int equipeId = Integer.valueOf(String.valueOf(pointsEtape.get(i)[1]));
+            double pointsEquipe = Double.valueOf(String.valueOf(pointsEtape.get(i)[0]));
+            points.put(equipeId,pointsEquipe);
         }
         return points;
     }
@@ -101,9 +90,18 @@ public class ClassementService {
         return false;
     }
 
+    public List<ClassementEquipe> classementEquipeParCategorie (int categorie){
+        List<Object[]> objects = equipeRepository.getPointsEquipeParCategorieId(categorie);
+        List<ClassementEquipe> classement = new ArrayList<>();
+        for (int i = 0; i < objects.size(); i++) {
+            Equipe equipe = equipeRepository.findById(Integer.valueOf(String.valueOf(objects.get(i)[2]))).orElse(null);
+            ClassementEquipe classementEquipe = new ClassementEquipe(equipe,Double.valueOf(String.valueOf(objects.get(i)[0])));
+            Categorie categorie1= categorieRepository.findById(Integer.valueOf(String.valueOf(objects.get(i)[1]))).orElse(null);
+            classementEquipe.setCategorie(categorie1);
+            classement.add(classementEquipe);
+        }
+        return classement;
+    }
 
-//    public List<List<ClassementCoureurParEtape>> getToutLesClassementParEtape(){
-//        List<Etape> etapes = etapeRepository.findAllEtapes();
-//        List<List<ClassementCoureurParEtape>> listeClassement
-//    }
+
 }
