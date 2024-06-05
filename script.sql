@@ -176,3 +176,43 @@ FROM temps_coureurs_par_etapes ce
                            left join points pc on rang_coureur = pc.classement
                   order by etape_id, rang_coureur) v_classement_points_categorie
              group by categories_id, equipe_id order by totalPoints desc
+
+
+--  alea jour 4
+-- VUE POUR AVOIR LES Points DES COUREURS EN FONCTION DE LEUR RANG
+create or replace view v_classement_etape as
+select row_number() over () as id,
+       rce.id as id_rang_coureur_etape,
+       etape_id,
+       coureur_id,
+       rang_coureur,
+       heure_depart,
+       heure_arrive,
+       coalesce(points_obtenus, 0)  as points,
+       rce.penalites
+from v_rang_coureur_etape rce
+         left join points pc on rang_coureur = pc.classement
+order by etape_id, rang_coureur;
+
+
+-- modifier vues pour les rangs des coureurs par etapes + penalites
+CREATE OR REPLACE VIEW v_rang_coureur_etape AS
+
+SELECT ce.id,
+       ce.coureur_id,
+       c2.nom_coureur,
+       nom_equipe,
+       ce.etape_id,
+       e.heure_depart,
+       heure_arrive,
+       (select sum(penalite.penalites ) from penalite WHERE equipe_id=c2.equipe_id and etape_id=e.id and etat=0) as penalites,
+       (COALESCE((heure_arrive +coalesce((select sum(penalite.penalites ) from penalite WHERE equipe_id=c2.equipe_id and etape_id=e.id and etat=0),'0 seconds'::interval)), NOW()) - e.heure_depart )   AS duree_course,
+       dense_rank() OVER (PARTITION BY ce.etape_id ORDER BY (heure_arrive+coalesce((select sum(penalite.penalites ) from penalite WHERE equipe_id=c2.equipe_id and etape_id=e.id and etat=0),'0 seconds'::interval))) AS rang_coureur
+FROM temps_coureurs_par_etapes ce
+         join etapes e on e.id = ce.etape_id
+         join coureur c2 on c2.id = ce.coureur_id
+         join public.equipe e2 on c2.equipe_id = e2.id;
+
+
+
+

@@ -14,9 +14,11 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.servlet.ModelAndView;
+import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import java.time.DateTimeException;
 import java.time.LocalDateTime;
@@ -54,7 +56,7 @@ public class EtapesController {
 
     @GetMapping("equipe/listEtapes")
 
-    public ModelAndView listeEtapeEquipe (){
+    public ModelAndView listeEtapeEquipe ( @ModelAttribute("validationError")HashMap<Integer,String> validationError){
         Equipe equipe = equipeService.getConnectedEquipe();
         String pageTitle="equipe "+equipe.getNomEquipe();
         List<Etape> etapes = etapeRepository.findAllEtapes();
@@ -62,6 +64,7 @@ public class EtapesController {
         ModelAndView modelAndView = new ModelAndView("equipe/etapeList");
         modelAndView.addObject("coureurs",coureurs);
         modelAndView.addObject("etapes",etapes);
+        modelAndView.addObject("validationError",validationError);
         modelAndView.addObject("pageTitle",pageTitle);
 
 
@@ -121,10 +124,17 @@ public class EtapesController {
         return modelAndView;
     }
     @GetMapping("/equipe/coureurParEtape")
-    public ModelAndView coureurParEtape(@RequestParam("id") int idEtape){
+    public ModelAndView coureurParEtape(@RequestParam("id") int idEtape , RedirectAttributes redirectAttributes){
         ModelAndView modelAndView= new ModelAndView("equipe/coureurParEquipeForm");
         List<Coureur> coureurs = new ArrayList<>();
+        Equipe equipe = equipeService.getConnectedEquipe();
+        HashMap<Integer,String> validationErrors = globalServices.validationInsertCoureurInEtape(idEtape,equipe.getId());
         String pageTitle= "Ajouter des coureurs pour les étapes";
+        if(!validationErrors.isEmpty()){
+            redirectAttributes.addFlashAttribute("validationError",validationErrors);
+            modelAndView.setViewName("redirect:/equipe/listEtapes");
+            return modelAndView;
+        }
         try{
             coureurs=globalServices.getCoureurParEquipe();
         }catch (Exception e){

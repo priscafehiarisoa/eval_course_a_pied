@@ -74,6 +74,7 @@
                         <th><button class="table-sort" data-sort="sort-city">lieu </button></th>
                         <th><button class="table-sort" data-sort="sort-type">heure de depart</button></th>
                         <th></th>
+                        <th></th>
                     </tr>
                     </thead>
                     <tbody class="table-tbody">
@@ -97,6 +98,11 @@
                                     </c:if>
                                 </c:forEach>
                             </c:if>
+                        </td>
+                        <td>
+                            <div class="m-3 col-auto">
+                                <a href="/classementGeneralPArEtape?etapeId=<%=etape.getId()%>" class="btn btn-outline-dark">Résultats</a>
+                            </div>
                         </td>
 
                         <%--           pay modals --%>

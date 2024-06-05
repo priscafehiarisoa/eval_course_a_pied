@@ -11,9 +11,17 @@ public class ClassementCoureurParEtape {
     int rangs;
     Coureur coureur;
     Etape etape;
+    Duration penalites;
+    Duration tempsFinal;
 
     public String getFormatedDurre(){
         return Utils.formatDuration(getDurree());
+    }
+    public String getFormatedPenalites(){
+        return Utils.formatDuration(getPenalites());
+    }
+    public String getFormatedTempsFinal(){
+        return Utils.formatDuration(getTempsFinal());
     }
 
     public ClassementCoureurParEtape(Duration durree, double points, int rangs, Coureur coureur, Etape etape) {
@@ -22,6 +30,15 @@ public class ClassementCoureurParEtape {
         setRangs(rangs);
         setCoureur(coureur);
         setEtape(etape);
+    }
+    public ClassementCoureurParEtape(Duration durree, double points, int rangs, Coureur coureur, Etape etape,Duration penalites,Duration tempsFinal) {
+        setDurree(durree);
+        setPoints(points);
+        setRangs(rangs);
+        setCoureur(coureur);
+        setEtape(etape);
+        setPenalites(penalites);
+        setTempsFinal(tempsFinal);
     }
 
     public ClassementCoureurParEtape() {

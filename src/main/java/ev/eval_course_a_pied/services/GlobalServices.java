@@ -148,6 +148,15 @@ public class GlobalServices {
 
     }
 
+    public HashMap<Integer,String> validationInsertCoureurInEtape( int idEtape, int idEquipe){
+        Etape etape = etapeRepository.findById(idEtape).orElse(null);
+        HashMap<Integer,String> formError=new HashMap<>();
+        if(!validationNombreCoureurEquipeParEtape(etape,idEquipe)){
+            formError.put(etape.getId(),"vous ne pouvez pas ajouter plus de coureurs dans cette etape");
+        }
+        return formError;
+    }
+
     public String uploadFile(MultipartFile file, ModelAndView modelAndView){
         String uploadDirectory = System.getProperty("user.dir") + "/uploadedFile/";
         Path uploadPath = Paths.get(uploadDirectory);

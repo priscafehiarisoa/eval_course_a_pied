@@ -40,7 +40,11 @@ public class ClassementService {
             Coureur coureur = coureurRepository.findById(idCoureur).orElse(null);
             Etape etape1 = etapeRepository.findById(idEtape).orElse(null);
             Duration durree=Utils.parseDuration(String.valueOf(object.get(i)[2]));
-            classement.add(new ClassementCoureurParEtape(durree,points,rang,coureur,etape1));
+            // ajouter les penalités ici
+            Duration penalites=Utils.parseDuration(String.valueOf(object.get(i)[8]));
+
+            Duration tempsFinal=Utils.parseDuration(String.valueOf(object.get(i)[9]));
+            classement.add(new ClassementCoureurParEtape(durree,points,rang,coureur,etape1,penalites,tempsFinal));
         }
         return classement;
     }

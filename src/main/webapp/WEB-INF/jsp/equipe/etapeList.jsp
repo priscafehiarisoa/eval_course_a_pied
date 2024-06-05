@@ -5,13 +5,7 @@
 <%@ page import="java.util.ArrayList" %>
 <%@ page import="java.util.List" %>
 <%@ page import="java.util.HashMap" %>
-<%@ page import="ev.eval_course_a_pied.entity.ChronoCoureurs" %><%--
-  Created by IntelliJ IDEA.
-  User: priscafehiarisoadama
-  Date: 13/05/2024
-  Time: 16:53
-  To change this template use File | Settings | File Templates.
---%>
+<%@ page import="ev.eval_course_a_pied.entity.ChronoCoureurs" %>
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
 
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
@@ -22,6 +16,7 @@
 <%
     List<Etape> etapeList = (List<Etape>) request.getAttribute("etapes");
     HashMap<Etape,List<ChronoCoureurs>> chrono = (HashMap<Etape, List<ChronoCoureurs>>) request.getAttribute("coureurs");
+    HashMap<Integer,String> validationError = (HashMap<Integer, String>) request.getAttribute("validationError");
 %>
 <div class="page-wrapper">
     <div class="page-body m-5">
@@ -78,6 +73,17 @@
                 <div class="m-3 mt-3 right">
                     <a href="/equipe/coureurParEtape?id=<%=etapeList.get(i).getId()%>" class="btn btn-primary">Ajouter un coureur par etape</a>
                 </div>
+                <%
+                    if(validationError.get(etapeList.get(i).getId())!=null){
+                %>
+
+                <div class="alert alert-warning" role="alert">
+                    <h4 class="alert-title"><i class="ti ti-alert-hexagon icon"></i> <%=validationError.get(etapeList.get(i).getId())%></h4>
+
+                </div>
+
+                <%}%>
+
             </div>
         </div>
 
