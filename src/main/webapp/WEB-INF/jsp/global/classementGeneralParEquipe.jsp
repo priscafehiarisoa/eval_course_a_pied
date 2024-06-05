@@ -91,7 +91,6 @@
 
             %>
 
-
             <div class="list-group list-group-flush overflow-auto" style="max-height: 35rem">
                 <div class="list-group-item  <%if (isExaequo){%> bg-purple-lt <%}%> ">
                     <div class="row">
@@ -99,7 +98,9 @@
                             <span class="avatar" > <%=classement.get(i).getRang()%></span>
                         </a>
                         <div class="col text-truncate">
-                            <p class="text-body d-block"><%=classement.get(i).getEquipe().getNomEquipe()%> </p>
+                            <a href="/listPoimtsParEtapeEquipe?id=<%=classement.get(i).getEquipe().getId()%>">
+                                 <p class="text-body d-block"><%=classement.get(i).getEquipe().getNomEquipe()%> </p>
+                             </a>
                             <div class="text-muted text-truncate mt-n1">Points : <%=classement.get(i).getPoints()%></div>
                         </div>
 
@@ -116,6 +117,7 @@
                     </div>
                 </div>
             </div>
+
             <%  }%>
 
         </div>

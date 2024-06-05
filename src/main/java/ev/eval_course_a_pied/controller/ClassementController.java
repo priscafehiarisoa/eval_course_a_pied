@@ -102,4 +102,15 @@ public class ClassementController {
         modelAndView.addObject("redirectPage","classementGeneralParEquipeCategorie");
         return modelAndView;
     }
+
+    @GetMapping("listPoimtsParEtapeEquipe")
+    public ModelAndView listPoimtsParEtapeEquipe(@RequestParam("id") int idEquipe){
+        List<Object[]> equipes = equipeRepository.getListPointsEtape(idEquipe);
+        ModelAndView modelAndView = new ModelAndView("global/listePointsEquipeEtape");
+        modelAndView.addObject("listEquipes",equipes);
+        modelAndView.addObject("pageTitle","liste des points par de l'equipe par etape");
+        return modelAndView;
+    }
+
+
 }

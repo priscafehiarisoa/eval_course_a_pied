@@ -39,4 +39,12 @@ public interface EquipeRepository extends JpaRepository<Equipe, Integer> {
             "                  order by etape_id, rang_coureur) v_classement_points_categorie  " +
             "             group by categories_id, equipe_id order by totalPoints desc",nativeQuery = true)
     List<Object[]> getPointsEquipeParCategorieId(int categorie);
+
+    @Query(value = "select sum(points),nom_equipe,lieu from v_classement_etape " +
+            "    join coureur c on c.id = v_classement_etape.coureur_id " +
+            "    join equipe e on e.id = c.equipe_id " +
+            "    join etapes e2 on v_classement_etape.etape_id = e2.id " +
+            "                                      where equipe_id = :equipe " +
+            "group by nom_equipe, lieu",nativeQuery = true)
+    List<Object[]> getListPointsEtape(@Param("equipe") int idEquipe);
 }

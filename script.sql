@@ -216,3 +216,11 @@ FROM temps_coureurs_par_etapes ce
 
 
 
+select points,nom_equipe,lieu from v_classement_etape
+    join coureur c on c.id = v_classement_etape.coureur_id
+    join equipe e on e.id = c.equipe_id
+    join etapes e2 on v_classement_etape.etape_id = e2.id
+                                      where equipe_id = :equipe
+
+
+select sum(points),c.equipe_id from v_classement_etape join coureur c on v_classement_etape.coureur_id = c.id group by c.equipe_id
