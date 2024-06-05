@@ -30,16 +30,22 @@
             <div class="card-body">
                 <form:form action="/admin/importDonnee" method="post" enctype="multipart/form-data">
 
+
+                    <div class="valid-feedback">
+                            ${success}
+                    </div>
+
                     <div class="m-5">
-                        <label for="devis">import etapes</label>
-                        <input type="file" name="etape" class="form-control <% if(request.getParameter("error")!=null){ out.print("is-invalid");} %> " id="devis">
-                        <div class="invalid-feedback"><%=request.getParameter("error")%></div>
+                        <label for="etapes">import etapes</label>
+                        <input type="file" name="etape" class="form-control <c:if test="${error!=null}">is-invalid</c:if>" id="etapes">
+                        <div class="invalid-feedback">${error}</div>
 
                     </div>
                     <div class="m-5">
-                        <label for="devis">import Resultat</label>
-                        <input type="file" name="resultat" class="form-control <% if(request.getParameter("error")!=null){ out.print("is-invalid");} %> " id="devis">
-                        <div class="invalid-feedback"><%=request.getParameter("error")%></div>
+                        <label for="resultat">import Resultat</label>
+                        <input type="file" name="resultat" class="form-control  <c:if test="${error!=null}">is-invalid</c:if> <c:if test="${success}"></c:if>" id="resultat">
+                        <div class="invalid-feedback">${error}</div>
+
 
                     </div>
                     <div class="m-3">

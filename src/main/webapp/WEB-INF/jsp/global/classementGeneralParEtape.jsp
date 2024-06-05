@@ -73,7 +73,9 @@
                                 <span class="avatar" > <%=classement.get(i).getRangs()%></span>
                             </a>
                             <div class="col text-truncate">
-                                <p class="text-body d-block">ND* :<%=classement.get(i).getCoureur().getNumeroDeDossard()%> , Nom : <%=classement.get(i).getCoureur().getNomCoureur()%></p>
+                                <p class="text-body d-block">
+<%--                                    ND* :<%=classement.get(i).getCoureur().getNumeroDeDossard()%> ,--%>
+                                    Nom : <%=classement.get(i).getCoureur().getNomCoureur()%></p>
                                 <div class="text-muted text-truncate mt-n1">Points : <%=classement.get(i).getPoints()%></div>
                                 <div class="text-muted text-truncate mt-n1">Temps : <%=classement.get(i).getFormatedDurre()%></div>
                             </div>

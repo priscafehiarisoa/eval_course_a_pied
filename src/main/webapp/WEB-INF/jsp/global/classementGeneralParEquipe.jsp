@@ -58,52 +58,245 @@
 
 
 
-        <div class="col-12 mt-5">
-            <div class="card">
-                <div class="card-header">
-                    <div class="mb-3">
-                        <h3 class="card-title">${pageTitle}</h3>
-                    </div>
-
+<div class="row">
+    <div class="col-6 mx-3 mt-5">
+        <div class="card">
+            <div class="card-header">
+                <div class="mb-3">
+                    <h3 class="card-title">${pageTitle}</h3>
                 </div>
 
-                    <div class="mb-3 px-3 pt-4">
-                        <%
-                            if (request.getAttribute("categorie")!=null){
-                                Categorie categorie = (Categorie)request.getAttribute("categorie");
-                        %>
-                        <h4><%=categorie.getNomCategorie()%></h4>
-                        <%} else {%>
-                        <h4>Classement générale</h4>
-                        <%}%>
-                    </div>
+            </div>
 
-                    <%
-                        for (int i = 0; i < classement.size(); i++) { %>
+            <div class="mb-3 px-3 pt-4">
+                <%
+                    Categorie categorie = (Categorie)request.getAttribute("categorie");
 
-                    <div class="list-group list-group-flush overflow-auto" style="max-height: 35rem">
-                        <div class="list-group-item">
-                            <div class="row">
-                                <a href="#" class="col-auto">
-                                    <span class="avatar" > <%=classement.get(i).getRang()%></span>
-                                </a>
-                                <div class="col text-truncate">
-                                    <p class="text-body d-block"><%=classement.get(i).getEquipe().getNomEquipe()%> </p>
-                                    <div class="text-muted text-truncate mt-n1">Points : <%=classement.get(i).getPoints()%></div>
-                                </div>
-                                <div class="col-2">
-                                    <% if (classement.get(i).getRang()==1){ %>
-                                    <a class="btn btn-success" href="/certificat?idEquipe=<%=classement.get(i).getEquipe().getId()%>&points=<%=classement.get(i).getPoints()%>"> get the certificate</a>
-                                    <%}%>
-                                </div>
-                            </div>
+                    if (categorie!=null){
+                %>
+                <h4><%=categorie.getNomCategorie()%></h4>
+                <%} else {%>
+                <h4>Classement générale</h4>
+                <%}%>
+            </div>
+
+            <%
+                for (int i = 0; i < classement.size(); i++) { %>
+
+            <div class="list-group list-group-flush overflow-auto" style="max-height: 35rem">
+                <div class="list-group-item">
+                    <div class="row">
+                        <a href="#" class="col-auto">
+                            <span class="avatar" > <%=classement.get(i).getRang()%></span>
+                        </a>
+                        <div class="col text-truncate">
+                            <p class="text-body d-block"><%=classement.get(i).getEquipe().getNomEquipe()%> </p>
+                            <div class="text-muted text-truncate mt-n1">Points : <%=classement.get(i).getPoints()%></div>
+                        </div>
+                        <div class="col-auto">
+                            <% if (classement.get(i).getRang()==1){ %>
+                            <a class="btn btn-yellow" href="/certificat?idEquipe=<%=classement.get(i).getEquipe().getId()%>&points=<%=classement.get(i).getPoints()%>&class=<% if(categorie!=null){%>category : ${categorie.nomCategorie}<%} else {%>general category<%}%>"> <i class="ti ti-certificate icon "></i> certificat</a>
+                            <%}%>
                         </div>
                     </div>
-                    <%  }%>
+                </div>
+            </div>
+            <%  }%>
 
+        </div>
+    </div>
+    <div class="card col-5 mx-3 mt-5">
+        <div class="card-header">
+            <div class="card-title">
+                Graphe <% if(categorie!=null){%>categorie : ${categorie.nomCategorie}<%} else {%>categorie générale<%}%>
             </div>
         </div>
+        <div id="chart-mentions" class="chart-lg ">
+        </div>
+    </div>
 
+<%--    <div class="chartCard">--%>
+<%--        <div class="chartBox">--%>
+<%--            <canvas id="myChart"></canvas>--%>
+<%--        </div>--%>
+<%--    </div>--%>
+
+    <script>
+        // @formatter:off
+
+
+        document.addEventListener("DOMContentLoaded", function () {
+            var equipe=[]
+            var points = []
+            var i = 0;
+            <c:forEach items="${classement}" var="current" varStatus="status">
+            equipe[i] = '<c:out value='${current.equipe.nomEquipe}'/>';
+            points[i]=<c:out value='${current.points}'/>
+            i++;
+            </c:forEach>
+            console.log("points : "+points)
+            window.ApexCharts && (new ApexCharts(document.getElementById('chart-mentions'), {
+                chart: {
+                    type: "pie",
+                    fontFamily: 'inherit',
+                    fontSize:20
+                    ,
+                    parentHeightOffset: 0,
+                    stacked: true,
+                },
+                plotOptions: {
+                    bar: {
+                        columnWidth: '50%',
+                    }
+                },
+                    labels: equipe
+
+                ,dataLabels: {
+                    enabled: true,
+                    formatter : function (val, opts){
+                        return opts.w.config.series[opts.seriesIndex];
+                    },
+                    style: {
+                        colors: [tabler.getColor('gray-200'),'rgba(252,198,198,0.6)'],
+                        fontSize: 16,
+                    },
+                    background: {
+                        enabled: true,
+                        foreColor: 'rgba(239,0,0,0.6)',
+                        borderWidth: 0,
+                    },
+
+                },
+
+                // plugins :[ChartDataLabels],
+                fill: {
+                    opacity: 1,
+                },
+                colors: [
+                    'rgba(255, 26, 104, 0.6)',
+                    'rgba(54, 162, 235, 0.6)',
+                    'rgba(3,220,220,0.6)',
+                    'rgba(44,2,128,0.6)',
+                    'rgba(255, 206, 86, 0.6)',
+                    'rgba(75, 192, 192, 0.6)',
+                    'rgba(153, 102, 255, 0.6)',
+                    'rgba(255, 159, 64, 0.6)',
+                    'rgba(159,77,106,0.6)',
+
+                    'rgba(0, 0, 0, 0.6)'
+                ],
+
+                borderColor: [
+                    'rgba(255, 26, 104, 1)',
+                    'rgba(54, 162, 235, 1)',
+                    'rgba(255, 206, 86, 1)',
+                    'rgba(75, 192, 192, 1)',
+                    'rgba(153, 102, 255, 1)',
+                    'rgba(255, 159, 64, 1)',
+                    'rgba(0, 0, 0, 1)'
+                ],
+                series: points,
+                tooltip: {
+                    theme: 'dark'
+                },
+                legend: {
+                    position: 'bottom'                },
+            })).render();
+        });
+        // @formatter:on
+    </script>
+
+
+
+
+<%--        <div class="chartCard">--%>
+<%--            <div class="chartBox">--%>
+<%--                <canvas id="myChart"></canvas>--%>
+<%--            </div>--%>
+<%--        </div>--%>
+
+<%--    <script type="text/javascript" src="https://cdn.jsdelivr.net/npm/chart.js/dist/chart.umd.min.js"></script>--%>
+<%--    <script src="https://cdnjs.cloudflare.com/ajax/libs/chartjs-plugin-datalabels/2.2.0/chartjs-plugin-datalabels.min.js" integrity="sha512-JPcRR8yFa8mmCsfrw4TNte1ZvF1e3+1SdGMslZvmrzDYxS69J7J49vkFL8u6u8PlPJK+H3voElBtUCzaXj+6ig==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>--%>
+<%--    <script>--%>
+<%--        var equipe=[]--%>
+<%--        var points = []--%>
+<%--        var i = 0;--%>
+<%--        <c:forEach items="${classement}" var="current" varStatus="status">--%>
+<%--        equipe[i] = '<c:out value='${current.equipe.nomEquipe}'/>';--%>
+<%--        points[i]=<c:out value='${current.points}'/>--%>
+<%--            i++;--%>
+<%--        </c:forEach>--%>
+<%--        // setup--%>
+<%--        const data = {--%>
+<%--            labels: equipe,--%>
+<%--            datasets: [{--%>
+<%--                label: "points",--%>
+<%--                data: points,--%>
+<%--                backgroundColor: [--%>
+<%--                    'rgba(255, 26, 104, 0.2)',--%>
+<%--                    'rgba(54, 162, 235, 0.2)',--%>
+<%--                    'rgba(255, 206, 86, 0.2)',--%>
+<%--                    'rgba(75, 192, 192, 0.2)',--%>
+<%--                    'rgba(153, 102, 255, 0.2)',--%>
+<%--                    'rgba(255, 159, 64, 0.2)',--%>
+<%--                    'rgba(0, 0, 0, 0.2)'--%>
+<%--                ],--%>
+<%--                borderColor: [--%>
+<%--                    'rgba(255, 26, 104, 1)',--%>
+<%--                    'rgba(54, 162, 235, 1)',--%>
+<%--                    'rgba(255, 206, 86, 1)',--%>
+<%--                    'rgba(75, 192, 192, 1)',--%>
+<%--                    'rgba(153, 102, 255, 1)',--%>
+<%--                    'rgba(255, 159, 64, 1)',--%>
+<%--                    'rgba(0, 0, 0, 1)'--%>
+<%--                ],--%>
+<%--                borderWidth: 1--%>
+<%--            }]--%>
+<%--        };--%>
+
+<%--        // config--%>
+<%--        const config = {--%>
+<%--            type: 'pie',--%>
+<%--            data ,--%>
+<%--            options: {--%>
+
+<%--            }--%>
+<%--            ,--%>
+<%--            plugins:[ChartDataLabels],--%>
+
+<%--                datalabels: {--%>
+
+<%--                    color: 'blue',--%>
+<%--                    labels: {--%>
+<%--                        title: {--%>
+<%--                            font: {--%>
+<%--                                weight: 'bold'--%>
+<%--                            }--%>
+<%--                        },--%>
+<%--                        value: {--%>
+<%--                            color: 'green'--%>
+<%--                        }--%>
+<%--                    }--%>
+<%--                }--%>
+
+
+<%--        };--%>
+
+<%--        Chart.defaults.font.size = 16;--%>
+<%--        Chart.defaults.font.weight = 'bold';--%>
+<%--        // render init block--%>
+<%--        const myChart = new Chart(--%>
+<%--            document.getElementById('myChart'),--%>
+<%--            config--%>
+<%--        );--%>
+
+<%--        // Instantly assign Chart.js version--%>
+<%--        const chartVersion = document.getElementById('chartVersion');--%>
+<%--        chartVersion.innerText = Chart.version;--%>
+<%--    </script>--%>
+
+
+</div>
         <%-- end main content --%>
 
     </div>

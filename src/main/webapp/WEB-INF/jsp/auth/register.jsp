@@ -34,10 +34,10 @@
                             Password
                         </label>
                         <div class="input-group input-group-flat">
-                            <input type="password" name="password" class="form-control <c:if test="${password!=null}" >is-invalid</c:if>"  placeholder="Your password"  autocomplete="off">
+                            <input type="password" name="password" id="password2" class="form-control <c:if test="${password!=null}" >is-invalid</c:if>"  placeholder="Your password"  autocomplete="off">
                             <span class="input-group-text">
                                 <a href="#" class="link-secondary" title="Show password" data-bs-toggle="tooltip"><!-- Download SVG icon from http://tabler-icons.io/i/eye -->
-                                  <i class="icon ti ti-eye"></i>
+                                  <i class="icon ti ti-eye toggle-password"></i>
                                 </a>
                             </span>
                             <div class="invalid-feedback"><c:if test="${password!=null}" ><c:out value="${password}"></c:out></c:if></div>
@@ -49,10 +49,10 @@
                             Confirmation
                         </label>
                         <div class="input-group input-group-flat">
-                            <input type="password" name="confirmPassword" class="form-control <c:if test="${password!=null}" >is-invalid</c:if>"  placeholder="confirm your password"  autocomplete="off">
+                            <input type="password" name="confirmPassword" id="password" class="form-control <c:if test="${password!=null}" >is-invalid</c:if>"  placeholder="confirm your password"  autocomplete="off">
                             <span class="input-group-text">
                                 <a href="#" class="link-secondary" title="Show password" data-bs-toggle="tooltip"><!-- Download SVG icon from http://tabler-icons.io/i/eye -->
-                                  <i class="icon ti ti-eye"></i>
+                                  <i class="icon ti ti-eye toggle-password"></i>
                                 </a>
                             </span>
                             <div class="invalid-feedback"><c:if test="${passeord!=null}" ><c:out value="${password}"></c:out></c:if></div>
@@ -72,6 +72,28 @@
         </div>
     </div>
 </div>
+<script>
+    document.addEventListener('DOMContentLoaded', function() {
+        const togglePassword = document.querySelectorAll('.toggle-password');
+        togglePassword.forEach(toggle => {
+            toggle.addEventListener('click', function(event) {
+                const passwordInput = document.getElementById('password');
+                if (passwordInput.type === 'password') {
+                    passwordInput.type = 'text';
+                } else {
+                    passwordInput.type = 'password';
+                }
+
+                const passwordInput2 = document.getElementById('password2');
+                if (passwordInput2.type === 'password') {
+                    passwordInput2.type = 'text';
+                } else {
+                    passwordInput2.type = 'password';
+                }
+            });
+        });
+    });
+</script>
 
 
 <%@include file="../1-basic_setup/footer.jsp"%>

@@ -54,7 +54,7 @@
                 </div>
                 <div class="mb-3">
                     <label for="date" class="form-label">Heure départ</label>
-                    <input type="datetime-local" step="1"  class="form-control <% if(formError.get("date")!=null){ out.print("is-invalid");} %>" id="date" name="heureDepart">
+                    <input type="datetime-local" step="1" disabled  class="form-control <% if(formError.get("date")!=null){ out.print("is-invalid");} %>" id="date" value="${etape.heureDepart}" name="heureDepart">
                     <div class="invalid-feedback"><%=formError.get("date")%></div>
 
                 </div>

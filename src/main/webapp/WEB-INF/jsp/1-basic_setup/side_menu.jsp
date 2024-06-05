@@ -28,8 +28,9 @@
                 </button>
                 <h1 class="navbar-brand navbar-brand-autodark">
                     <%--       logo --%>
-                    <%@include file="../1-basic_setup/logo/logo_light_linked.jsp"%>
-                    <%--        end logo--%>
+                        <div class=" mb-4 mx-auto" id="fehy-dark" style="width: 25%; height: 25%">
+                            <img src="../../../../public/logo/fehy-high-resolution-logo-white-transparent.png" alt="brand Logo">
+                        </div>                    <%--        end logo--%>
                 </h1>
 
 <%--            div Menu --%>
@@ -39,7 +40,7 @@
                     <%
                         assert usermodel2 != null;
                         for (Menu menu: usermodel2.getMenuList()){%>
-                    <li class="nav-item">
+                    <li class="nav-item mb-3">
                         <a class="nav-link" href="<%=menu.getMenuPath()%>" >
                           <span class="nav-link-icon d-md-none d-lg-inline-block">
                             <i class="ti ti-<%=menu.getIcon()%>" style="font-size: 20px"></i>

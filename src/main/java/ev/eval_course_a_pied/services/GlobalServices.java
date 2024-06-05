@@ -36,6 +36,8 @@ public class GlobalServices {
     private final CategorieRepository categorieRepository;
     private final RegisterService registerService;
     private final PenaliteRepository penaliteRepository;
+    private final TempResultatRepository tempResultatRepository;
+    private final TempPointsRepository tempPointsRepository;
 
     public GlobalServices(UserService userService,
                           EtapeRepository etapeRepository,
@@ -46,7 +48,9 @@ public class GlobalServices {
                           PointRepository pointRepository,
                           GenreRepository genreRepository,
                           CategorieRepository categorieRepository, RegisterService registerService,
-                          PenaliteRepository penaliteRepository) {
+                          PenaliteRepository penaliteRepository,
+                          TempResultatRepository tempResultatRepository,
+                          TempPointsRepository tempPointsRepository) {
         this.userService = userService;
 
         this.etapeRepository = etapeRepository;
@@ -60,6 +64,8 @@ public class GlobalServices {
         this.categorieRepository = categorieRepository;
         this.registerService = registerService;
         this.penaliteRepository = penaliteRepository;
+        this.tempResultatRepository = tempResultatRepository;
+        this.tempPointsRepository = tempPointsRepository;
     }
 
     public List<Coureur> getCoureursParEtape(int etapeId) throws Exception {
@@ -168,11 +174,14 @@ public class GlobalServices {
         tempsCoureursParEtapeRepository.deleteAll();
         coureurEtapeRepository.deleteAll();
         coureurRepository.deleteAll();
+        penaliteRepository.deleteAll();
         equipeRepository.deleteAll();
         etapeRepository.deleteAll();
         pointRepository.deleteAll();
         genreRepository.deleteAll();
-        categorieRepository.deleteAll();
+//        categorieRepository.deleteAll();
+        tempResultatRepository.deleteAll();
+        tempPointsRepository.deleteAll();
         userService.resetuser(tobedeleted);
     }
 
@@ -200,6 +209,9 @@ public class GlobalServices {
 
         if((LocalDate.now().getYear()-coureur.getDateDeNaissance().getYear())<18){
             categories.add(categorieRepository.getCategorieByNomCategorie("junior").orElse(categorieRepository.getCategorieByNomCategorie("Junior").orElse(categorieRepository.getCategorieByNomCategorie("JUNIOR").orElse(null))));
+        }
+        else{
+            categories.add(categorieRepository.getCategorieByNomCategorie("senior").orElse(categorieRepository.getCategorieByNomCategorie("Senior").orElse(categorieRepository.getCategorieByNomCategorie("SENIOR").orElse(null))));
         }
         String g = coureur.getGenre().getNom_genre();
 

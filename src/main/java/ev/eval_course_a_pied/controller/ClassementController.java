@@ -93,11 +93,12 @@ public class ClassementController {
     }
 
     @GetMapping("certificat")
-    public ModelAndView certificat (@RequestParam("idEquipe") int equipe, @RequestParam("points") double points ){
+    public ModelAndView certificat (@RequestParam("idEquipe") int equipe, @RequestParam("points") double points , @RequestParam ("class") String classement){
         ModelAndView modelAndView= new ModelAndView("global/Certificat");
         Equipe equipe1 = equipeRepository.findById(equipe).orElse(null);
         modelAndView.addObject("equipe",equipe1);
         modelAndView.addObject("points",points);
+        modelAndView.addObject("classement",classement);
         modelAndView.addObject("redirectPage","classementGeneralParEquipeCategorie");
         return modelAndView;
     }

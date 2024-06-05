@@ -74,9 +74,9 @@
     </div>
     <button class="mt-3 btn btn-primary" onclick="generatePDF()">print Pdf</button>
     <div class="card">
-        <form action="/log" method="post">
+        <form action="/">
 
-            <button type="submit">submit crud</button>
+            <button type="submit" class="ti ti-">submit crud</button>
         </form>
     </div>
 

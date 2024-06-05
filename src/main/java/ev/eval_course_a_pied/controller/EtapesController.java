@@ -76,6 +76,7 @@ public class EtapesController {
         ModelAndView modelAndView= new ModelAndView("admin/tempsCoureurParEtapeForm");
         List<Coureur> coureurs = new ArrayList<>();
         String pageTitle= "Ajouter les temps des coureurs";
+        Etape etape = etapeRepository.findById(idEtape).orElse(null);
         try{
             coureurs=globalServices.getCoureursParEtape(idEtape);
         }catch (Exception e){
@@ -83,6 +84,7 @@ public class EtapesController {
         }
         modelAndView.addObject("coureurs",coureurs);
         modelAndView.addObject("idEtape",idEtape);
+        modelAndView.addObject("etape",etape);
         modelAndView.addObject("formError",new HashMap<String,String>());
         modelAndView.addObject("pageTitle",pageTitle);
         modelAndView.addObject("pageRedirection","/admin/tempsCoureurParEtape");

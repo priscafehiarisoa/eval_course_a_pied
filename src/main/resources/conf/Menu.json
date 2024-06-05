@@ -1,19 +1,19 @@
 {
   "ADMIN": [
-    {"icon": "list-details", "menuName": "List Etapes","menuPath": "admin/listEtapes"},
-    {"icon": "list-details", "menuName": "reset","menuPath": "/reset"},
-    {"icon": "list-details", "menuName": "import points","menuPath": "/admin/importPoints"},
-    {"icon": "list-details", "menuName": "import donnee","menuPath": "/admin/importDonnee"},
-    {"icon": "list-details", "menuName": "Generate Categories","menuPath": "/generateCategories"},
-    {"icon": "list-details", "menuName": "pénalites","menuPath": "/admin/penalites"}
+    {"icon": "map-pins", "menuName": "List Etapes","menuPath": "admin/listEtapes"},
+    {"icon": "restore", "menuName": "reset","menuPath": "/reset"},
+    {"icon": "table-import", "menuName": "import points","menuPath": "/admin/importPoints"},
+    {"icon": "table-import", "menuName": "import donnee","menuPath": "/admin/importDonnee"},
+    {"icon": "category-2", "menuName": "Generate Categories","menuPath": "/generateCategories"},
+    {"icon": "clock-minus", "menuName": "pénalites","menuPath": "/admin/penalites"}
   ],
   "EQUIPE": [
-    {"icon": "list-details", "menuName": "List Etapes","menuPath": "equipe/listEtapes"}
+    {"icon": "map-pins", "menuName": "List Etapes","menuPath": "equipe/listEtapes"}
   ],
   "global": [
     {"icon": "dashboard", "menuName": "home","menuPath": "/"},
-    {"icon": "list-details", "menuName": "classement général par etape","menuPath": "/classementGeneralPArEtape"},
-    {"icon": "list-details", "menuName": "classement général par equipe","menuPath": "/classementGeneralParEquipe"}
+    {"icon": "star", "menuName": "classement général par etape","menuPath": "/classementGeneralPArEtape"},
+    {"icon": "star-filled", "menuName": "classement général par equipe","menuPath": "/classementGeneralParEquipe"}
 
 
   ]

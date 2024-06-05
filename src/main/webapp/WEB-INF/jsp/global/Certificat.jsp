@@ -50,8 +50,8 @@
                             EQUIPE ${equipe.nomEquipe}
                         </p>
                     </div>
-                    <div style="font-family: Noteworthy">
-                        <p>they have successfully won the race hold from : __/__/__ to __/__/__ </p>
+                    <div class="mb-2" style="font-family: Noteworthy">
+                        ${classement}
                     </div>
                     <div style="font-family: Noteworthy">
                         <h1>Points : ${points} </h1>

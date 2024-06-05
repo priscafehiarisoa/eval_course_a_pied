@@ -98,6 +98,7 @@ public class ClassementService {
             ClassementEquipe classementEquipe = new ClassementEquipe(equipe,Double.valueOf(String.valueOf(objects.get(i)[0])));
             Categorie categorie1= categorieRepository.findById(Integer.valueOf(String.valueOf(objects.get(i)[1]))).orElse(null);
             classementEquipe.setCategorie(categorie1);
+            classementEquipe.setRang(Integer.valueOf(String.valueOf(objects.get(i)[3])));
             classement.add(classementEquipe);
         }
         return classement;

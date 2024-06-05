@@ -32,8 +32,9 @@
 
                     <div class="m-3">
                         <label for="devis">import points</label>
-                        <input type="file" name="points" class="form-control <% if(request.getParameter("error")!=null){ out.print("is-invalid");} %> " id="devis">
-                        <div class="invalid-feedback"><%=request.getParameter("error")%></div>
+                        <input type="file" name="points" class="form-control <c:if test="${error!=null}">is-invalid</c:if><c:if test="${success!=null}">is-valid</c:if>  " id="devis">
+                        <div class="invalid-feedback">${error}</div>
+                        <div class="valid-feedback">${success}</div>
 
                     </div>
                     <div class="m-3">

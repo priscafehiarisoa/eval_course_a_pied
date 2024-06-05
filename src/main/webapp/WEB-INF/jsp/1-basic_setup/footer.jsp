@@ -16,7 +16,8 @@
 <script src="../../../public/libs/litepicker/dist/litepicker.js?1684106062" defer></script>
 <script src="../../../public/libs/tom-select/dist/js/tom-select.base.min.js?1684106062" defer></script>
 
-<script src="../../../public/libs/apexcharts/dist/apexcharts.min.js?1684106062" defer></script>
+<%--<script src="../../../public/libs/apexcharts/dist/apexcharts.min.js?1684106062" defer></script>--%>
+<script src="../../../public/libs/apexcharts/dist/apexcharts.min.js" defer></script>
 <script src="../../../public/libs/jsvectormap/dist/js/jsvectormap.min.js?1684106062" defer></script>
 <script src="../../../public/libs/jsvectormap/dist/maps/world.js?1684106062" defer></script>
 <script src="../../../public/libs/jsvectormap/dist/maps/world-merc.js?1684106062" defer></script>
