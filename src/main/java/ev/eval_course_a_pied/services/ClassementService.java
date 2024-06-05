@@ -72,9 +72,14 @@ public class ClassementService {
             classementEquipes.add( new ClassementEquipe(equipe,points));
         }
         Collections.sort(classementEquipes);
-        for (int i = 0; i < classementEquipes.size(); i++) {
-            classementEquipes.get(i).setRang(i+1);
+        int rang = 1;
+        for (int i = 0; i < classementEquipes.size()-1; i++) {
+            classementEquipes.get(i).setRang(rang);
+            if(classementEquipes.get(i).getPoints()!=classementEquipes.get(i+1).getPoints()){
+                rang++;
+            }
         }
+        classementEquipes.get(classementEquipes.size()-1).setRang(rang);
         if(checkIfAllNull(classementEquipes)){
             return new ArrayList<ClassementEquipe>();
         }

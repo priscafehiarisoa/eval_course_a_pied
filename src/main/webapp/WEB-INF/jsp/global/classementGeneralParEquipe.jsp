@@ -80,11 +80,20 @@
                 <%}%>
             </div>
 
+
             <%
-                for (int i = 0; i < classement.size(); i++) { %>
+                int previousRank = -1;
+                for (int i = 0; i < classement.size(); i++) {
+                    int currentRank = classement.get(i).getRang();
+                    boolean isExaequo = (i > 0 && currentRank == previousRank) || (i < classement.size() - 1 && currentRank == classement.get(i + 1).getRang());
+                     previousRank = classement.get(i).getRang();
+
+
+            %>
+
 
             <div class="list-group list-group-flush overflow-auto" style="max-height: 35rem">
-                <div class="list-group-item">
+                <div class="list-group-item  <%if (isExaequo){%> bg-purple-lt <%}%> ">
                     <div class="row">
                         <a href="#" class="col-auto">
                             <span class="avatar" > <%=classement.get(i).getRang()%></span>
@@ -93,11 +102,17 @@
                             <p class="text-body d-block"><%=classement.get(i).getEquipe().getNomEquipe()%> </p>
                             <div class="text-muted text-truncate mt-n1">Points : <%=classement.get(i).getPoints()%></div>
                         </div>
-                        <div class="col-auto">
-                            <% if (classement.get(i).getRang()==1){ %>
-                            <a class="btn btn-yellow" href="/certificat?idEquipe=<%=classement.get(i).getEquipe().getId()%>&points=<%=classement.get(i).getPoints()%>&class=<% if(categorie!=null){%>category : ${categorie.nomCategorie}<%} else {%>general category<%}%>"> <i class="ti ti-certificate icon "></i> certificat</a>
-                            <%}%>
-                        </div>
+
+                            <c:if test="${not empty pageContext.request.userPrincipal.authorities}">
+                                <c:forEach var="authority" items="${pageContext.request.userPrincipal.authorities}">
+                                    <c:if test="${ authority.authority == 'ADMIN'}">
+                                        <div class="col-auto">
+                                            <% if (classement.get(i).getRang()==1){ %>
+                                            <a class="btn btn-yellow" href="/certificat?idEquipe=<%=classement.get(i).getEquipe().getId()%>&points=<%=classement.get(i).getPoints()%>&class=<% if(categorie!=null){%>category : ${categorie.nomCategorie}<%} else {%>general category<%}%>"> <i class="ti ti-certificate icon "></i> certificat</a>
+                                            <%}%>
+                                        </div>                                    </c:if>
+                                </c:forEach>
+                            </c:if>
                     </div>
                 </div>
             </div>
